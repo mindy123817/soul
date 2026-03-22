@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员 · 生成测试链接</title>
+    <style>
+        body { font-family: system-ui; max-width: 600px; margin: 40px auto; padding: 20px; }
+        input, button { padding: 12px; margin: 8px 0; width: 100%; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; }
+        button { background: #5f4b41; color: white; cursor: pointer; border: none; }
+        pre { background: #f5f2f0; padding: 16px; border-radius: 12px; overflow-x: auto; white-space: pre-wrap; }
+        .error { color: #b1624b; }
+    </style>
+</head>
+<body>
+    <h2>生成一次性测试链接</h2>
+    <label>管理员密码</label>
+    <input type="password" id="password" placeholder="输入密码">
+    <label>生成数量</label>
+    <input type="number" id="count" value="10" min="1" max="200">
+    <button onclick="generate()">生成链接</button>
+    <div id="output"></div>
+
+    <script>
+        async function generate() {
+            const password = document.getElementById('password').value;
+            const count = document.getElementById('count').value;
+            const output = document.getElementById('output');
+            output.innerHTML = '生成中...';
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, count: parseInt(count) })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    output.innerHTML = '<h3>生成的链接（每个只能用一次）：</h3><pre>' + data.links.join('\n') + '</pre>';
+                } else {
+                    output.innerHTML = `<p class="error">错误：${data.error}</p>`;
+                }
+            } catch (err) {
+                output.innerHTML = '<p class="error">请求失败，请检查网络或后端配置。</p>';
+            }
+        }
+    </script>
+</body>
+</html>
