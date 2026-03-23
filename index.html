@@ -215,7 +215,6 @@
             text-decoration: none;
         }
     </style>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="container" id="app">
@@ -251,7 +250,6 @@
     // 初始化 Supabase (已替换为真实值)
     const SUPABASE_URL = 'https://itmtohzreevcfjdwhogt.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0bXRvaHpyZWV2Y2ZqZHdob2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxODkxMTQsImV4cCI6MjA4OTc2NTExNH0.HmZa3Cvf4dXD2YcXXbjDXFOmXTRb2Al0POv32Q85YmU';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // 题库（完整32题，已按最终文档修正）
     const questions = [
