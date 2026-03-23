@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>灵魂形状测试 · 探索你的心灵图谱</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f7f3f0 0%, #e8e0da 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+        }
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 36px;
+            padding: 28px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: #2c3e4f;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #5f6c7a;
+            margin-bottom: 28px;
+            border-left: 3px solid #b89b8b;
+            padding-left: 14px;
+            font-weight: 300;
+        }
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: #ddd2ca;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #8f6b5c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-container {
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+        .question-text {
+            font-size: 22px;
+            font-weight: 450;
+            line-height: 1.4;
+            color: #1f2b36;
+            margin-bottom: 28px;
+            padding-right: 10px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: white;
+            border: 1px solid #e2d7d0;
+            border-radius: 60px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #2c3e4f;
+            transition: all 0.15s;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option:hover {
+            background: #faf5f2;
+            border-color: #b89b8b;
+            transform: scale(1.01);
+        }
+        .option.selected {
+            background: #e9dbd4;
+            border-color: #8f6b5c;
+            box-shadow: 0 4px 12px rgba(143,107,92,0.15);
+        }
+        .option-prefix {
+            width: 24px;
+            height: 24px;
+            border-radius: 24px;
+            background: #f0e7e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #5f4b41;
+            font-weight: 500;
+        }
+        .option.selected .option-prefix {
+            background: #8f6b5c;
+            color: white;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 60px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            color: #5f4b41;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid #dccfc8;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            flex: 0 1 auto;
+        }
+        .btn-primary {
+            background: #5f4b41;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 16px rgba(95,75,65,0.15);
+        }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .result-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .result-type {
+            font-size: 32px;
+            font-weight: 500;
+            color: #2c3e4f;
+            margin-bottom: 12px;
+        }
+        .result-image {
+            font-size: 60px;
+            margin: 20px 0;
+            opacity: 0.9;
+        }
+        .result-desc {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #3e4c5b;
+            margin-bottom: 24px;
+            white-space: pre-line;
+            text-align: left;
+        }
+        .result-quote {
+            font-style: italic;
+            color: #8f6b5c;
+            padding: 20px;
+            border-top: 1px dashed #dccfc8;
+            border-bottom: 1px dashed #dccfc8;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        .epilogue {
+            background: rgba(95,75,65,0.05);
+            border-radius: 24px;
+            padding: 24px;
+            margin: 24px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #5f4b41;
+            text-align: left;
+        }
+        .error-msg {
+            color: #b1624b;
+            background: #fbe9e3;
+            padding: 20px;
+            border-radius: 24px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+        .admin-link {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            font-size: 12px;
+            color: #b5a092;
+            background: rgba(255,255,255,0.6);
+            padding: 4px 12px;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+    </style>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="container" id="app">
+    <div id="loading" style="text-align:center; padding:40px;">加载中...</div>
+    <div id="home-screen" class="hidden">
+        <h1>灵魂形状测试</h1>
+        <div class="subtitle">一组诗性问题 · 描绘你的心灵图谱</div>
+        <div style="margin: 30px 0; text-align: center;">
+            <div style="font-size: 60px; margin-bottom: 20px;">🌀</div>
+            <p style="color: #3e4c5b; line-height: 1.8; margin-bottom: 32px;">
+                这不是一个贴标签的测试。<br>
+                它更像一面镜子——关于你的依靠、爱与暗面，关于你如何成为你。<br>
+                这些问题，每一个都是通往内心的窄门。<br>
+                请在一个不被打扰的时刻，安静地答完。<br>
+                你会得到一幅关于自己的心灵图谱，以及一句给你的诗。
+            </p>
+            <button class="btn btn-primary" id="start-btn" style="width: 100%;">开始探索 →</button>
+        </div>
+    </div>
+    <div id="quiz-screen" class="hidden">
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        <div class="question-container" id="question-container"></div>
+        <div class="nav-buttons">
+            <button class="btn" id="prev-btn" disabled>← 上一题</button>
+            <button class="btn btn-primary" id="next-btn" disabled>下一题 →</button>
+        </div>
+    </div>
+    <div id="result-screen" class="hidden result-screen"></div>
+</div>
+<a href="/admin.html" class="admin-link" target="_blank">管理员</a>
+
+<script>
+    // 初始化 Supabase (已替换为真实值)
+    const SUPABASE_URL = 'https://itmtohzreevcfjdwhogt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0bXRvaHpyZWV2Y2ZqZHdob2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxODkxMTQsImV4cCI6MjA4OTc2NTExNH0.HmZa3Cvf4dXD2YcXXbjDXFOmXTRb2Al0POv32Q85YmU';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 题库（完整32题，已按最终文档修正）
+    const questions = [
+        { text: "1. 在人生的低谷中，谁是你可以一直依靠的人？", options: ["A. 家人", "B. 朋友", "C. 爱人", "D. 自己"], scores: { X: [1,2,2,3], Y: [1,2,2,3], Z: [1,1,2,3] } },
+        { text: "2. 爱在你手中，更像哪种质地的存在？", options: ["A. 陶土——用行动塑形，沉默却坚实", "B. 墨水——写入未来的每一行计划", "C. 琴弦——共振最隐秘的频率与颤栗", "D. 火焰——以炙热创造只属于两人的烙印"], scores: { X: [1,2,3,3], Y: [1,2,3,2], Z: [1,2,2,3] } },
+        { text: "3. 你理解的“爱情”，最接近哪种自然现象？", options: ["A. 季风——周期性的、不可抗拒的席卷与撤退", "B. 共生——两株植物的根系在黑暗中纠缠生长", "C. 潮汐——受更深邃力量牵引的规律起落", "D. 极光——稀薄大气中偶然绽放的幻美光芒"], scores: { X: [1,2,2,3], Y: [2,3,2,1], Z: [1,2,2,3] } },
+        { text: "4. 什么会成为你结束长久关系的“最后一片雪花”？", options: ["A. 信任的裂隙已深至结构层面", "B. 在这段关系中，我逐渐感到窒息", "C. 外在力量让我们必须驶向不同洋流", "D. 我们仍在发光，只是灵魂不再契合"], scores: { X: [1,2,2,3], Y: [2,1,3,3], Z: [2,2,1,3] } },
+        { text: "5. 你更愿意与拥有什么样特质的人产生羁绊？", options: ["A. 被坚定选择、围绕旋转的安全", "B. 在对方眼中看见完全理解的自己", "C. 无法抗拒地被吸引，哪怕通向黑洞", "D. 托举你成为更轻盈、更接近天空的版本"], scores: { X: [1,2,3,3], Y: [1,2,2,3], Z: [1,2,2,3] } },
+        { text: "6. 如果有一扇时空门，你希望它用来做什么？", options: ["A. 改写某个让今夜的你仍隐隐作痛的选择", "B. 眺望生命尽头的自己是否得偿所愿", "C. 窥视所有“如果当初”版本的自己", "D. 门后是此刻呼吸着的、无需逃离的当下"], scores: { X: [1,3,2,1], Y: [1,2,2,3], Z: [2,2,2,3] } },
+        { text: "7. 你如何看待自己的阴暗面？", options: ["A. 地下密室——上锁并假装钥匙早已丢失", "B. 透明展柜——陈列它，但保持安全的观察距离", "C. 共生花园——承认它是生态系统必要的一部分", "D. 炼金实验室——尝试将它转化为另一种能量"], scores: { X: [1,2,3,3], Y: [1,2,3,3], Z: [1,2,3,3] } },
+        { text: "8. 你认为你最无法舍弃的是？", options: ["A. 生命", "B. 自由", "C. 爱", "D. 钱财"], scores: { X: [1,3,2,1], Y: [2,3,3,1], Z: [2,3,2,1] } },
+        { text: "9. 如果一段关系将走到终点，你心中想要挽回，你会怎么做？", options: ["A. 直白的表达内心，告诉对方你的不舍", "B. 该结束的就意味着没有缘分，尽管不舍也会任他结束", "C. 默默修复，不再言语", "D. 等待下一次的转机"], scores: { X: [2,2,2,2], Y: [2,3,2,2], Z: [2,3,2,2] } },
+        { text: "10. 你体内蓬勃的欲望，最像哪种地质活动？", options: ["A. 火山——必须喷发，创造新的地形与毁灭", "B. 构造运动——缓慢塑造格局，偶尔引发地震", "C. 地下水——在暗处涌动，滋养或腐蚀根基", "D. 化石层——被时间压制，成为平静的印记"], scores: { X: [3,2,2,1], Y: [2,2,2,2], Z: [3,2,2,1] } },
+        { text: "11. 你如何理解灵魂的“独特性”与“价值”？", options: ["A. 万里挑一的存在，本就该被仰望", "B. 独特与否，取决于是否被看见与开采", "C. 人人皆有，细微处见无限宇宙", "D. 价值不在独特，而在滋养万物"], scores: { X: [2,2,2,2], Y: [2,2,2,2], Z: [2,2,2,2] } },
+        { text: "12. 爱上一个人时，你最深层的吸引来自？", options: ["A. 镜像——在对方眼中看见更美好的自己", "B. 拼图——找到缺失的那片，让我成为完整", "C. 谜题——被无法完全理解的神秘所吸引", "D. 土壤——在关系中获得滋养，生长出新形态"], scores: { X: [2,2,2,2], Y: [2,2,2,2], Z: [2,2,2,2] } },
+        { text: "13. 如果你遭遇到非常糟糕的事情，你会怎么做？", options: ["A. 我不在意世人的眼光，我有不为此感到痛苦的权力", "B. 隔绝外界评价，保护内心感受", "C. 在痛苦中寻找可重新生长的部分", "D. 抽离出来，分析事情发生的因果"], scores: { X: [3,2,3,1], Y: [2,3,2,2], Z: [3,2,3,2] } },
+        { text: "14. 亲缘关系对你来说，最像是哪种联系？", options: ["A. 血缘关系的链接，难以割舍", "B. 情感关系，以情感投入的多少来判定", "C. 按付出的多少来判定，仅是血缘联系无法产生感情", "D. 超越血缘，以心意相通为系带"], scores: { X: [1,2,2,2], Y: [1,2,3,3], Z: [1,2,3,3] } },
+        { text: "15. 你穷极一生，最想抵达的是？", options: ["A. 答案——关于世界与自我的终极理解", "B. 体验——尽可能丰富、浓烈地活过", "C. 作品——在世界上留下不可磨灭的印记", "D. 彼岸——超越此生的平静或解脱"], scores: { X: [2,3,2,2], Y: [2,2,2,2], Z: [2,3,2,3] } },
+        { text: "16. 你的精神“避难所”最常是？", options: ["A. 文字堡垒——在阅读与书写中构建的世界", "B. 自然秘境——山水草木间的宁静与包容", "C. 艺术殿堂——音乐、绘画等创造的审美空间", "D. 内心洞穴——退回自我的深处，与外界隔绝"], scores: { X: [2,2,2,2], Y: [1,2,2,3], Z: [3,2,2,3] } },
+        { text: "17. 在你心中，“伟大”最接近哪种形态？", options: ["A. 坚定的理想情怀", "B. 在时间中流传的不朽故事", "C. 看似微小，却蕴含改变世界的力量", "D. 表面平静，内里包容万物"], scores: { X: [3,2,2,2], Y: [2,2,2,2], Z: [3,2,2,2] } },
+        { text: "18. 你的内心世界最常呈现哪种气象？", options: ["A. 暴风雪——激烈、混沌，充满能量与危险", "B. 永昼——明亮、温暖，但可能缺乏阴影与深度", "C. 雾霭清晨——朦胧、暧昧，边界模糊不清", "D. 深海静流——表面平静，深处暗涌不息"], scores: { X: [3,1,2,2], Y: [2,2,2,3], Z: [3,2,2,3] } },
+        { text: "19. 什么最容易引发你的深切共情？", options: ["A. 他人承受的痛苦与不公", "B. 前人跨越时空与自己共鸣的境遇", "C. 易逝的、脆弱的美好事物", "D. 在困境中顽强生存的生命意志"], scores: { X: [2,2,2,2], Y: [2,3,2,2], Z: [2,3,2,2] } },
+        { text: "20. 迄今为止，你最大的生命缺憾源于？", options: ["A. 早年经历中未治愈的创伤", "B. 在关键岔路口放弃的可能性", "C. 被压抑或未曾发展的自我", "D. 时间本身带来的必然丧失"], scores: { X: [1,2,2,3], Y: [2,2,2,3], Z: [1,2,2,3] } },
+        { text: "21. 你如何解读生命中的“痛苦”？", options: ["A. 等待被我点燃，转化为光与热", "B. 很重，但构成了我的重力与足迹", "C. 痛苦就是痛苦本身，它什么都不是", "D. 需要被冷静观察、解剖与分析"], scores: { X: [3,2,1,1], Y: [2,2,2,2], Z: [3,2,2,2] } },
+        { text: "22. 若有能力回击过往的伤害者，你会如何选择？", options: ["A. 按兵不动，警醒自己与他人", "B. 让那里生长出与伤害无关的生命", "C. 让ta看到你现在的闪耀", "D. 拆除心中的审判席，擅自“原谅”是对过去自己的背叛"], scores: { X: [2,2,2,1], Y: [2,2,2,2], Z: [2,3,2,1] } },
+        { text: "23. 如果生命在此刻停止，你的隐喻是？", options: ["A. 断章——在最激越的句子中央，留下永恒的悬念", "B. 完成的作品——我已签名，画框内的世界已然完整", "C. 未寄出的信——有些话永远停在了“亲爱的”之后", "D. 按下的暂停键——只是偶然的静音，故事还会继续"], scores: { X: [3,2,1,1], Y: [2,2,2,2], Z: [3,2,2,2] } },
+        { text: "24. 你如何看待亲密关系中的“负面”？", options: ["A. 无需贴上好坏标签，它是存在于贫乏之外的鲜活", "B. 这是阻碍，也让抓地更紧、生长更有力", "C. 在其中显影彼此最真实的底片", "D. 将它看作淤塞——爱要流动，必须疏浚河道"], scores: { X: [3,2,2,1], Y: [3,2,2,1], Z: [3,2,2,1] } },
+        { text: "25. “平静安稳”对你而言更像？", options: ["A. 安全，但会消磨你的灵气与生气", "B. 表面无波，地下是蓬勃的生命网络", "C. 重复的标点——让故事的句子得以延续，却非句子本身", "D. 台风眼——风暴自我的内心，环绕却暂不侵袭"], scores: { X: [3,1,2,2], Y: [2,3,2,2], Z: [2,3,2,2] } },
+        { text: "26. “活着”对你而言，最接近哪种状态？", options: ["A. 燃烧——消耗自己，发出光与热，直至成灰", "B. 流淌——顺应地形，塑造河道，最终汇入更大的存在", "C. 观测——作为一面镜子或一扇窗，反映与观看世界", "D. 游戏——在有限的规则内，创造无限的体验与意义"], scores: { X: [3,2,1,3], Y: [2,2,3,2], Z: [3,2,2,3] } },
+        { text: "27. 你感知中，自己灵魂的“重量”？", options: ["A. 羽毛——能被最小的风托起，飘向未知的应许之地", "B. 琥珀——封存着某个决定性的瞬间，凝固而珍贵", "C. 磁石——在混沌中自有方向，吸引与排斥着命运的铁屑", "D. 种子——轻，但蕴含着撕裂坚硬大地的潜能"], scores: { X: [3,1,2,2], Y: [2,1,2,2], Z: [3,1,2,2] } },
+        { text: "28. 生活中那些你不感兴趣的人，是你的？", options: ["A. 背景色——构成世界景深，让我聚焦的主体更突出", "B. 镜子背面——照见我所不是、所不欲成为的一切", "C. 陌生的方言——我无意掌握，但承认其存在的合理性", "D. 过量的噪音——需要主动屏蔽，以守护内心的清晰频率"], scores: { X: [2,2,2,2], Y: [2,2,2,1], Z: [2,2,2,1] } },
+        { text: "29. 你最深层的自信，扎根于何处？", options: ["A. 外界的认可、成就与可见的美", "B. 仅仅因为“我存在”这一事实本身", "C. 我知道自己总能学习、适应与创造", "D. 总有人见证过我，并选择停留"], scores: { X: [1,3,2,2], Y: [2,3,2,2], Z: [1,3,2,2] } },
+        { text: "30. 你如何看待自己的缺点？", options: ["A. 它是我的影子，定义了我的轮廓与光的来向", "B. 承认其力量，并学习与之共舞", "C. bug，系统不完美，但可以通过迭代升级", "D. 在特定情境下，它会反转成我的优势"], scores: { X: [3,2,1,2], Y: [3,2,1,2], Z: [3,2,1,2] } },
+        { text: "31. 亲密关系中，你最珍视的“基石”是？", options: ["A. 一种直接的、感官与心灵的眩晕与吸引", "B. 物质与情感上的庇护所，免于漂泊", "C. 在对方深邃的宇宙中，找到自己星图的坐标", "D. 一起写下故事，或建造一座花园"], scores: { X: [2,1,2,2], Y: [2,1,3,3], Z: [2,1,3,3] } },
+        { text: "32. 你更渴望什么样的生活？", options: ["A. 四季、晨昏、规律中的安心与丰饶", "B. 看似回到原点，实则已抵达新的高度", "C. 探索未知，永不回头", "D. 无数可能性的瞬间，跳跃而非连续"], scores: { X: [1,2,3,3], Y: [2,3,3,2], Z: [1,2,3,3] } }
+    ];
+
+    // 结果描述库（完整）
+    const results = {
+        '古墙的守望者': { desc: `你的稳定不是天生的，是每一次选择不离开的结果。你在关系中深深扎根，像一棵树的根须探入地下暗河，你知道那里有水源。你相信忠诚比激情更持久，责任比自由更沉重，但也因此，你成为许多人生命中“不会倒塌”的部分。\n\n痛苦被你锻造成肌肉记忆——它不会消失，但它教会你如何承受。缺憾被你转化为守护的动力：你守护他人，就像当初渴望被守护一样。你不轻易原谅，但一旦原谅，就是磐石般的承诺。你有时觉得自己过于沉重，但正是这份重量，让靠近你的人有了立足之地。`, quote: `“你是一座有记忆的城，每一块砖都刻着一个不离开的理由。城墙不是为了隔绝，而是为了让城内的人，安心生长。”`, growth: `有时，允许城墙上有藤蔓生长，也是力量的一种。不是所有裂缝都需要修补，有些裂缝，是光照进来的地方。`, works: `余华《活着》｜电影《归来》｜穆旦《赞美》` },
+        '榕树的低语': { desc: `你的扎根是一种本能，像树知道往哪里生长。你并不刻意维系什么，却总能让身边的人感到安心——因为你把给予当作呼吸，把陪伴当作四季轮转般自然。你在关系中自然地付出，不觉得是牺牲，因为你相信：滋养他人，并不会枯竭自己。\n\n痛苦被你接纳为年轮的一部分，它没有成为伤痕，而是成为你理解他人的深度。缺憾反而让你更完整——你从不追求没有裂痕的人生，因为你知道，裂痕是光线进入的地方。你原谅，不是因为应该，而是因为放下比背负更轻盈。你像一棵会移动的树，走到哪里，就把根系带到哪里，也把荫凉带到哪里。`, quote: `“你是一棵会走路的树，根在哪里，家就在哪里。你不急着成为森林，因为你相信，时间会让一切自然生长。”`, growth: `你的涌现需要空间，记得为自己保留一片不被侵入的土壤。有时，主动选择扎根的方向，也是生长的一种。`, works: `梭罗《瓦尔登湖》｜电影《小森林》｜海子《活在珍贵的人间》` },
+        '灯塔的独白': { desc: `你的边界不是天生的，是每一次说“不”后刻下的痕迹。你曾经允许过世界越界，直到你明白：没有边界的善良，是对自己的残忍。于是你在独立中寻找力量，在孤独中确认自我。你锻造自己的价值观如同锻造刀刃——它既保护你，也切割虚假。\n\n你习惯一个人站在高处，不是因为冷漠，而是因为你需要清晰。你相信：看得清楚，才能走得坚定。你的自信来自成就，因为你用行动证明了自己；你的缺点是待修复的bug，因为你认为人永远可以更好。你不轻易让人靠近，但靠近的人，会看到你灯罩下持续燃烧的火。`, quote: `“你站在悬崖边发光，不是为了照亮深渊，而是为了告诉世界：‘我在这里，以我锻造的棱角。’”`, growth: `灯塔也需要被照亮，偶尔允许别人为你发光。不是所有边界都需要守卫，有些门，可以打开。`, works: `夏洛蒂·勃朗特《简·爱》｜电影《穿普拉达的女王》｜舒婷《致橡树》` },
+        '水晶的静默': { desc: `你的独立是与生俱来的清晰，像水晶知道自己如何生长。你不必费力划出边界，因为你本身就是边界——你的存在方式，就是告诉世界：这里是起点，那里是终点。你在关系中保持透明，但不失去结构；你接纳他人的靠近，但从不模糊自己的形状。\n\n你接纳自己的孤独，因为它让你看见自己。你不是不需要他人，而是你相信：真正的联结，是两个完整的人之间的相遇，而不是残缺的相互填补。你的自信仅仅因为你存在，你的缺点是风景的一部分——你从不试图抹去什么，因为你知道，正是这些“不完美”，让你成为你。`, quote: `“你是透明的存在，光穿过你时，会分解成七种颜色。你不解释自己，因为看见的人，自会看见。”`, growth: `有时，允许自己不那么透明，也是一种完整。水晶最动人的时刻，是当光照出它内部的阴影时。`, works: `佩索阿《惶然录》｜电影《天使爱美丽》｜辛波斯卡《一见钟情》` },
+        '锻炉的咏叹': { desc: `你的热情不是偶然，是精心守护的火焰。你深知：没有温度的激情只是烟花，而有方向的燃烧才能锻造出形状。你在深刻的碰撞中确认温度，在痛苦中提炼力量——你不回避灼热，因为你知道，真正的成长往往发生在高温之下。\n\n你相信爱需要努力，关系需要经营，自我需要塑造。你不相信“顺其自然”，因为你知道，一切珍贵的事物都需要双手的参与。你选择原谅或不原谅，都是深思熟虑的决定。你活着，不是为了体验，而是为了创造——你想在这个世界上留下点什么，哪怕只是一道痕迹。`, quote: `“你握着锻锤站在炉前，每一次敲打，都在改变世界的形状。你相信火焰可以锻造一切，除了火焰本身。”`, growth: `有时，让火焰只是火焰，不为了锻造什么，也是一种燃烧。炉火需要休息，你也一样。`, works: `毛姆《月亮与六便士》｜电影《黑天鹅》｜北岛《回答》` },
+        '野火的漫游': { desc: `你的热烈是自然溢出，像太阳无需证明。你在相遇中燃烧，在离别后重生。你爱，因为爱是你的存在方式；你痛，因为痛让你更鲜活。你不问“值不值得”，你只问“是否真实”。你相信：宁可燃烧成灰烬，也不要熄灭成灰烬。\n\n你的阴暗面不是你压抑的，而是你接纳的另一半火焰。你从不假装自己只有光明，因为你知道，真正的完整，是拥抱所有颜色。你活着，是为了体验一切——浓烈的、稀薄的、明亮的、幽暗的。你不怕失败，只怕从未开始。你是一团没有形状的火，但你照亮过的路，会记得你的温度。`, quote: `“你是荒野上的火，不为了照亮，不为了温暖，只是燃烧。经过你的人，都带着你的温度继续前行。”`, growth: `野火也需要休憩，允许自己有灰烬期，等待下一次复燃。有时，不燃烧也是一种存在方式。`, works: `杰克·凯鲁亚克《在路上》｜电影《燃烧女子的肖像》｜艾米莉·狄金森“我本可以忍受黑暗”` },
+        '风筝的远行': { desc: `你的自由不是天生的，是每一次放下的结果。你选择轻盈，因为沉重太累；你选择独立，因为依赖太危险。你锻造自己的通透，像玻璃被高温熔化后重新成型——你经历过破碎，才学会了不依附。你的自信来自不断超越，你的缺点是待转化的能量。\n\n你相信：真正的自由，不是没有牵绊，而是知道自己被什么牵绊，却依然选择飞翔。你总是在路上，在寻找，在抵达下一个远方。你不属于任何一个地方，但每一个你停留过的地方，都因你的经过而变得不同。你害怕被固定，但你也渴望有一根线，让你知道：你不会迷失。`, quote: `“你是一只风筝，飞得高，是因为有人在地上拉着线。你以为的自由，其实是另一种形式的锚定。”`, growth: `偶尔回头看看，是谁在为你拉着线。真正的自由，是知道自己有线，但仍然选择飞翔。`, works: `村上春树《挪威的森林》｜电影《盗梦空间》｜顾城《一代人》` },
+        '流云的歌': { desc: `你的自由是你的存在方式，像云生来就会飘浮。你不必费力挣脱什么，因为你从未被真正束缚。你在关系中保持透明，在独立中保持流动。你接纳所有相遇和离别，因为它们都是风景——你不占有，所以你也无法失去。\n\n你的灵魂像水汽，可以凝结成雨，也可以升腾成雾。你没有固定的形状，所以你可以成为任何形状。你相信：意义不在终点，而在路上；你活着，不是为了到达，而是为了经过。你接纳所有可能，也接纳所有不可能。你不是在寻找什么，你只是成为你。`, quote: `“你是天空中的过客，不占有任何风景，却因此拥有了整个天空。你变幻，所以你永恒。”`, growth: `云也需要凝结才能降雨，偶尔让自己落地，滋养一片土地。有时，停下来也是一种流动。`, works: `《庄子》｜电影《云图》｜王维《终南别业》“行到水穷处，坐看云起时”` }
+    };
+
+    let currentIndex = 0;
+    let answers = new Array(questions.length).fill(null);
+    let token = null;
+    const loadingDiv = document.getElementById('loading');
+    const homeScreen = document.getElementById('home-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const startBtn = document.getElementById('start-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    async function validateToken() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const t = urlParams.get('token');
+        if (!t) {
+            loadingDiv.innerHTML = '<div class="error-msg">❌ 无效的访问链接。请通过正规渠道购买测试。</div>';
+            return false;
+        }
+        token = t;
+        try {
+            const response = await fetch(`/api/validate?token=${encodeURIComponent(token)}`);
+            const data = await response.json();
+            if (data.valid) {
+                loadingDiv.classList.add('hidden');
+                homeScreen.classList.remove('hidden');
+                return true;
+            } else {
+                loadingDiv.innerHTML = '<div class="error-msg">❌ 该链接已失效或不存在。每个链接仅限使用一次。</div>';
+                return false;
+            }
+        } catch (err) {
+            console.error(err);
+            loadingDiv.innerHTML = '<div class="error-msg">❌ 验证失败，请稍后再试。</div>';
+            return false;
+        }
+    }
+
+    function renderQuestion() {
+        const q = questions[currentIndex];
+        let html = `<div class="question-text">${q.text}</div><div class="options">`;
+        q.options.forEach((opt, idx) => {
+            const selectedClass = (answers[currentIndex] === idx) ? 'selected' : '';
+            html += `<div class="option ${selectedClass}" data-opt-index="${idx}"><span class="option-prefix">${String.fromCharCode(65+idx)}</span><span>${opt}</span></div>`;
+        });
+        html += `</div>`;
+        questionContainer.innerHTML = html;
+        document.querySelectorAll('.option').forEach(optDiv => {
+            optDiv.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.optIndex);
+                answers[currentIndex] = idx;
+                document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                this.classList.add('selected');
+                nextBtn.disabled = false;
+            });
+        });
+        const answeredCount = answers.filter(a => a !== null).length;
+        progressBar.style.width = (answeredCount / questions.length * 100) + '%';
+        prevBtn.disabled = (currentIndex === 0);
+        nextBtn.disabled = (answers[currentIndex] === null);
+        nextBtn.textContent = (currentIndex === questions.length-1) ? '完成 →' : '下一题 →';
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) { currentIndex--; renderQuestion(); }
+    }
+
+    async function nextQuestion() {
+        if (currentIndex < questions.length-1) {
+            currentIndex++;
+            renderQuestion();
+        } else {
+            if (answers.every(a => a !== null)) {
+                let xTotal=0, yTotal=0, zTotal=0;
+                for (let i=0; i<questions.length; i++) {
+                    const q = questions[i];
+                    const ans = answers[i];
+                    if (q.scores.X && ans < q.scores.X.length) xTotal += q.scores.X[ans];
+                    if (q.scores.Y && ans < q.scores.Y.length) yTotal += q.scores.Y[ans];
+                    if (q.scores.Z && ans < q.scores.Z.length) zTotal += q.scores.Z[ans];
+                }
+                const normX = ((xTotal-8)/16)*10;
+                const normY = ((yTotal-8)/16)*10;
+                const normZ = ((zTotal-8)/16)*10;
+                const x = normX, y = normY, z = normZ;
+                let typeName = '';
+                if (x <= 5 && y <= 5) typeName = z <= 5 ? '古墙的守望者' : '榕树的低语';
+                else if (x <= 5 && y > 5) typeName = z <= 5 ? '灯塔的独白' : '水晶的静默';
+                else if (x > 5 && y <= 5) typeName = z <= 5 ? '锻炉的咏叹' : '野火的漫游';
+                else typeName = z <= 5 ? '风筝的远行' : '流云的歌';
+                await fetch('/api/validate', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ token, markUsed: true }) });
+                showResult(typeName);
+            } else alert('请回答所有问题');
+        }
+    }
+
+    function showResult(typeName) {
+        const info = results[typeName];
+        quizScreen.classList.add('hidden');
+        resultScreen.classList.remove('hidden');
+        resultScreen.innerHTML = `
+            <div class="result-type">${typeName}</div>
+            <div class="result-image">🌀</div>
+            <div class="result-desc">${info.desc}</div>
+            <div class="result-quote">${info.quote}</div>
+            <div class="epilogue"><strong>🌱 成长提示</strong><br>${info.growth}<br><br><strong>📖 与你共鸣</strong><br>${info.works}</div>
+            <div class="epilogue" style="background:transparent; border:none;">
+                <strong>终章</strong><br>
+                无论你得到的是哪一种灵魂形状，<br>
+                那都不是你的牢笼，只是你此刻的一幅自画像。<br>
+                你的人生，远比这个测试更辽阔。<br>
+                这里没有正确答案，只有属于你的、正在生长的可能性。<br>
+                愿你在认识自己的路上，走得更深、更自由。<br>
+                你永远可以是下一个版本的自己。<br>
+                <em>—— 本测试仅为自我探索的起点，非专业心理评估</em>
+            </div>
+            <button class="btn btn-primary" id="restart-btn">重新测试</button>
+        `;
+        document.getElementById('restart-btn').addEventListener('click', () => { resetTest(); });
+    }
+
+    function resetTest() {
+        answers.fill(null);
+        currentIndex = 0;
+        homeScreen.classList.remove('hidden');
+        quizScreen.classList.add('hidden');
+        resultScreen.classList.add('hidden');
+    }
+
+    startBtn.addEventListener('click', () => { homeScreen.classList.add('hidden'); quizScreen.classList.remove('hidden'); renderQuestion(); });
+    prevBtn.addEventListener('click', prevQuestion);
+    nextBtn.addEventListener('click', nextQuestion);
+
+    validateToken();
+</script>
+</body>
+</html>
